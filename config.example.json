@@ -1,0 +1,8 @@
+{
+  "host": "localhost",
+  "http-port": "3000",
+  "encryptionKey": "enter a long key here!",
+  "database": {
+    "dsn": "postgres://user:password@localhost/zebrahook"
+  }
+}

@@ -1,0 +1,673 @@
+openapi: 3.0.3
+info:
+  title: Zebrahook API
+  description: Zebrahook API allows to delegate the entire webhook stack.
+  version: "1.0"
+servers:
+- url: http://localhost:80
+  description: Default server for Zebrahook
+paths:
+  /v1/webhook/endpoints:
+    post:
+      tags:
+      - Zebrahook
+      summary: register Zebrahook
+      description: Allows to register a new webhook URL with the specified enabled
+        events
+      operationId: Zebrahook#register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequestBody'
+            example:
+              enabled_events:
+              - merchant-93842.order.*
+              - my.custom.event
+              metadata:
+                anyKeyHere: any value here
+              url: https://example.com/notifications
+      responses:
+        "200":
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookIDAndSecret'
+              example:
+                id: zhwe_c9ddsgbei1cst46tglh0
+                secret: zhwhsec_EkXBAkjQZLCtTMtTCoaNatyyiNKARe
+      security:
+      - jwt_header_Authorization: []
+  /v1/webhook/endpoints/:
+    get:
+      tags:
+      - Zebrahook
+      summary: listWebhookEndpoint Zebrahook
+      description: Allows to list and query registered webhook
+      operationId: Zebrahook#listWebhookEndpoint
+      parameters:
+      - name: limit
+        in: query
+        description: limit how many results to return, use -1 to return all results
+        allowEmptyValue: true
+        schema:
+          type: integer
+          description: limit how many results to return, use -1 to return all results
+          default: 50
+          example: 50
+          format: int32
+        example: 50
+      - name: offset
+        in: query
+        description: pagination, must be used in combination with limit
+        allowEmptyValue: true
+        schema:
+          type: integer
+          description: pagination, must be used in combination with limit
+          default: 0
+          example: 0
+        example: 0
+      - name: createdAt.gte
+        in: query
+        description: filter by createdAt unix (greater than or equal)
+        allowEmptyValue: true
+        schema:
+          type: integer
+          description: filter by createdAt unix (greater than or equal)
+          example: 1646278413
+          minimum: 0
+        example: 1646278413
+      - name: updatedAt.lt
+        in: query
+        description: filter by updatedAt unix (less than)
+        allowEmptyValue: true
+        schema:
+          type: integer
+          description: filter by updatedAt unix (less than)
+          example: 1646369084
+          minimum: 0
+        example: 1646369084
+      responses:
+        "200":
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListWebhookEndpointResponseBody'
+              example:
+                result:
+                - createdAt: 1646278413
+                  enabled_events:
+                  - merchant-93842.order.*
+                  - my.custom.event
+                  id: zhwe_c9ddsgbei1cst46tglh0
+                  metadata:
+                    anyKeyHere: any value here
+                  status: enabled
+                  updatedAt: 1646369084
+                  url: https://example.com/notifications
+                - createdAt: 1646278413
+                  enabled_events:
+                  - merchant-93842.order.*
+                  - my.custom.event
+                  id: zhwe_c9ddsgbei1cst46tglh0
+                  metadata:
+                    anyKeyHere: any value here
+                  status: enabled
+                  updatedAt: 1646369084
+                  url: https://example.com/notifications
+                - createdAt: 1646278413
+                  enabled_events:
+                  - merchant-93842.order.*
+                  - my.custom.event
+                  id: zhwe_c9ddsgbei1cst46tglh0
+                  metadata:
+                    anyKeyHere: any value here
+                  status: enabled
+                  updatedAt: 1646369084
+                  url: https://example.com/notifications
+                - createdAt: 1646278413
+                  enabled_events:
+                  - merchant-93842.order.*
+                  - my.custom.event
+                  id: zhwe_c9ddsgbei1cst46tglh0
+                  metadata:
+                    anyKeyHere: any value here
+                  status: enabled
+                  updatedAt: 1646369084
+                  url: https://example.com/notifications
+      security:
+      - jwt_header_Authorization: []
+  /v1/webhook/endpoints/{id}:
+    get:
+      tags:
+      - Zebrahook
+      summary: getWebhookEndpointById Zebrahook
+      description: Allows to get info about a registered webhook URL via the identifier
+      operationId: Zebrahook#getWebhookEndpointById
+      parameters:
+      - name: id
+        in: path
+        description: webhook identifier returned in creation
+        required: true
+        schema:
+          type: string
+          description: webhook identifier returned in creation
+          example: zhwe_c9ddsgbei1cst46tglh0
+        example: zhwe_c9ddsgbei1cst46tglh0
+      responses:
+        "200":
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookEndpoint'
+              example:
+                createdAt: 1646278413
+                enabled_events:
+                - merchant-93842.order.*
+                - my.custom.event
+                id: zhwe_c9ddsgbei1cst46tglh0
+                metadata:
+                  anyKeyHere: any value here
+                secret: zhwhsec_EkXBAkjQZLCtTMtTCoaNatyyiNKARe
+                status: enabled
+                updatedAt: 1646369084
+                url: https://example.com/notifications
+      security:
+      - jwt_header_Authorization: []
+    put:
+      tags:
+      - Zebrahook
+      summary: update Zebrahook
+      description: Allows to update a webhook created before
+      operationId: Zebrahook#update
+      parameters:
+      - name: id
+        in: path
+        description: identifier of the webhook
+        required: true
+        schema:
+          type: string
+          description: identifier of the webhook
+          example: zhwe_c9ddsgbei1cst46tglh0
+        example: zhwe_c9ddsgbei1cst46tglh0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRequestBody'
+            example:
+              disabled: true
+              enabled_events:
+              - your.event_name
+              - custom.event.*
+              metadata:
+                anyKeyHere: any value here
+              url: https://example.com/notifications
+      responses:
+        "200":
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitNewEventsResponseBody'
+              example:
+                success: false
+      security:
+      - jwt_header_Authorization: []
+  /v1/webhook/events:
+    post:
+      tags:
+      - Zebrahook
+      summary: submitNewEvents Zebrahook
+      description: Submit new events, all events will be asynchronously dispatched
+        to all endpoints that are subscribed to the provided event type (`enabled_events`)
+      operationId: Zebrahook#submitNewEvents
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitNewEventsRequestBody'
+            example:
+              events:
+              - event_data:
+                  amount: 8000
+                  currency: eur
+                  id: 372853
+                  payment_method_details:
+                    card:
+                      brand: visa
+                event_type: merchant-93842.charge.succeeded
+              - event_data:
+                  customer:
+                    address: Lorem Ipsum 33
+                    country: NL
+                  order_id: 12643
+                  sku: 9001-2
+                  type: A01
+                event_type: merchant-93842.order.shipped
+      responses:
+        "200":
+          description: OK response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitNewEventsResponseBody'
+              example:
+                success: true
+      security:
+      - jwt_header_Authorization: []
+components:
+  schemas:
+    EventRequest:
+      type: object
+      properties:
+        event_content:
+          type: object
+          description: event content that will be dispatched (any json object)
+          example:
+            customer:
+              address: Lorem Ipsum 123
+              country: NL
+            sku: "002432800"
+            status: processed
+          additionalProperties:
+            type: string
+            example: Ea voluptas.
+            format: binary
+        event_type:
+          type: string
+          description: Event type of the `event_content`
+          example: merchant-93842.order.shipped
+        priority:
+          type: integer
+          description: Optional priority for this event, an higher number will make
+            this event delivered before other ones
+          example: 1000
+          format: int64
+      example:
+        event_content:
+          customer:
+            address: Lorem Ipsum 123
+            country: NL
+          sku: "002432800"
+          status: processed
+        event_type: merchant-93842.order.shipped
+        priority: 1000
+      required:
+      - event_type
+      - event_content
+    ListWebhookEndpointResponseBody:
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/WebhookEndpointWithoutSecret'
+          example:
+          - createdAt: 1646278413
+            enabled_events:
+            - merchant-93842.order.*
+            - my.custom.event
+            id: zhwe_c9ddsgbei1cst46tglh0
+            metadata:
+              anyKeyHere: any value here
+            status: enabled
+            updatedAt: 1646369084
+            url: https://example.com/notifications
+          - createdAt: 1646278413
+            enabled_events:
+            - merchant-93842.order.*
+            - my.custom.event
+            id: zhwe_c9ddsgbei1cst46tglh0
+            metadata:
+              anyKeyHere: any value here
+            status: enabled
+            updatedAt: 1646369084
+            url: https://example.com/notifications
+      example:
+        result:
+        - createdAt: 1646278413
+          enabled_events:
+          - merchant-93842.order.*
+          - my.custom.event
+          id: zhwe_c9ddsgbei1cst46tglh0
+          metadata:
+            anyKeyHere: any value here
+          status: enabled
+          updatedAt: 1646369084
+          url: https://example.com/notifications
+        - createdAt: 1646278413
+          enabled_events:
+          - merchant-93842.order.*
+          - my.custom.event
+          id: zhwe_c9ddsgbei1cst46tglh0
+          metadata:
+            anyKeyHere: any value here
+          status: enabled
+          updatedAt: 1646369084
+          url: https://example.com/notifications
+        - createdAt: 1646278413
+          enabled_events:
+          - merchant-93842.order.*
+          - my.custom.event
+          id: zhwe_c9ddsgbei1cst46tglh0
+          metadata:
+            anyKeyHere: any value here
+          status: enabled
+          updatedAt: 1646369084
+          url: https://example.com/notifications
+        - createdAt: 1646278413
+          enabled_events:
+          - merchant-93842.order.*
+          - my.custom.event
+          id: zhwe_c9ddsgbei1cst46tglh0
+          metadata:
+            anyKeyHere: any value here
+          status: enabled
+          updatedAt: 1646369084
+          url: https://example.com/notifications
+      required:
+      - result
+    RegisterRequestBody:
+      type: object
+      properties:
+        enabled_events:
+          type: array
+          items:
+            type: string
+            example: your.event_name
+          description: Enabled events for this webhook URL, regex supported - use
+            `["*"]` to listen to all events
+          example:
+          - merchant-93842.order.*
+          - my.custom.event
+          minItems: 1
+        metadata:
+          type: object
+          description: Optionally pass any custom metadata (key->value)
+          example:
+            anyKeyHere: any value here
+          additionalProperties:
+            type: string
+            example: pa
+            minLength: 1
+        url:
+          type: string
+          description: URL of the webhook that will be called on each `enabled_events`
+          example: https://example.com/notifications
+          format: uri
+      example:
+        enabled_events:
+        - merchant-93842.order.*
+        - my.custom.event
+        metadata:
+          anyKeyHere: any value here
+        url: https://example.com/notifications
+      required:
+      - url
+      - enabled_events
+    SubmitNewEventsRequestBody:
+      type: object
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventRequest'
+          example:
+          - event_data:
+              amount: 8000
+              currency: eur
+              id: 372853
+              payment_method_details:
+                card:
+                  brand: visa
+            event_type: merchant-93842.charge.succeeded
+          - event_data:
+              customer:
+                address: Lorem Ipsum 33
+                country: NL
+              order_id: 12643
+              sku: 9001-2
+              type: A01
+            event_type: merchant-93842.order.shipped
+      example:
+        events:
+        - event_data:
+            amount: 8000
+            currency: eur
+            id: 372853
+            payment_method_details:
+              card:
+                brand: visa
+          event_type: merchant-93842.charge.succeeded
+        - event_data:
+            customer:
+              address: Lorem Ipsum 33
+              country: NL
+            order_id: 12643
+            sku: 9001-2
+            type: A01
+          event_type: merchant-93842.order.shipped
+      required:
+      - events
+    SubmitNewEventsResponseBody:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+      example:
+        success: true
+    UpdateRequestBody:
+      type: object
+      properties:
+        disabled:
+          type: boolean
+          description: If true this webhook endpoint won't receive any events, set
+            to false to re-enable it
+          example: false
+        enabled_events:
+          type: array
+          items:
+            type: string
+            example: your.event_name
+          description: Enabled events for this webhook URL, regex supported - use
+            `["*"]` to listen to all events
+          example:
+          - your.event_name
+          - custom.event.*
+        metadata:
+          type: object
+          description: Optionally pass any custom metadata (key->value)
+          example:
+            anyKeyHere: any value here
+          additionalProperties:
+            type: string
+            example: "2"
+            minLength: 1
+        url:
+          type: string
+          description: URL of the webhook that will be called on each `enabled_events`
+          example: https://example.com/notifications
+          format: uri
+      example:
+        disabled: true
+        enabled_events:
+        - your.event_name
+        - custom.event.*
+        metadata:
+          anyKeyHere: any value here
+        url: https://example.com/notifications
+    WebhookEndpoint:
+      type: object
+      properties:
+        createdAt:
+          type: integer
+          description: when this item was created (unix timestamp seconds)
+          example: 1646278413
+          format: int64
+        enabled_events:
+          type: array
+          items:
+            type: string
+            example: your.event_name
+          description: Enabled events for this webhook URL, regex supported - use
+            `["*"]` to listen to all events
+          example:
+          - merchant-93842.order.*
+          - my.custom.event
+          minItems: 1
+        id:
+          type: string
+          description: identifier of the webhook
+          example: zhwe_c9ddsgbei1cst46tglh0
+        metadata:
+          type: object
+          description: Optionally pass any custom metadata (key->value)
+          example:
+            anyKeyHere: any value here
+          additionalProperties:
+            type: string
+            example: x
+            minLength: 1
+        secret:
+          type: string
+          description: secret to be used by the webhook to verify the events
+          example: zhwhsec_EkXBAkjQZLCtTMtTCoaNatyyiNKARe
+        status:
+          type: string
+          description: status of current endpoint, enabled means that the webhook
+            endpoint is eligible for receiving webhook events
+          example: enabled
+          enum:
+          - enabled
+          - disabled
+        updatedAt:
+          type: integer
+          description: when this item was last updated (unix timestamp seconds)
+          example: 1646369084
+          format: int64
+        url:
+          type: string
+          description: URL of the webhook that will be called on each `enabled_events`
+          example: https://example.com/notifications
+          format: uri
+      example:
+        createdAt: 1646278413
+        enabled_events:
+        - merchant-93842.order.*
+        - my.custom.event
+        id: zhwe_c9ddsgbei1cst46tglh0
+        metadata:
+          anyKeyHere: any value here
+        secret: zhwhsec_EkXBAkjQZLCtTMtTCoaNatyyiNKARe
+        status: disabled
+        updatedAt: 1646369084
+        url: https://example.com/notifications
+      required:
+      - id
+      - secret
+      - url
+      - enabled_events
+      - createdAt
+      - updatedAt
+    WebhookEndpointWithoutSecret:
+      type: object
+      properties:
+        createdAt:
+          type: integer
+          description: when this item was created (unix timestamp seconds)
+          example: 1646278413
+          format: int64
+        enabled_events:
+          type: array
+          items:
+            type: string
+            example: your.event_name
+          description: Enabled events for this webhook URL, regex supported - use
+            `["*"]` to listen to all events
+          example:
+          - merchant-93842.order.*
+          - my.custom.event
+          minItems: 1
+        id:
+          type: string
+          description: identifier of the webhook
+          example: zhwe_c9ddsgbei1cst46tglh0
+        metadata:
+          type: object
+          description: Optionally pass any custom metadata (key->value)
+          example:
+            anyKeyHere: any value here
+          additionalProperties:
+            type: string
+            example: c
+            minLength: 1
+        status:
+          type: string
+          description: status of current endpoint, enabled means that the webhook
+            endpoint is eligible for receiving webhook events
+          example: enabled
+          enum:
+          - enabled
+          - disabled
+        updatedAt:
+          type: integer
+          description: when this item was last updated (unix timestamp seconds)
+          example: 1646369084
+          format: int64
+        url:
+          type: string
+          description: URL of the webhook that will be called on each `enabled_events`
+          example: https://example.com/notifications
+          format: uri
+      example:
+        createdAt: 1646278413
+        enabled_events:
+        - merchant-93842.order.*
+        - my.custom.event
+        id: zhwe_c9ddsgbei1cst46tglh0
+        metadata:
+          anyKeyHere: any value here
+        status: disabled
+        updatedAt: 1646369084
+        url: https://example.com/notifications
+      required:
+      - id
+      - url
+      - enabled_events
+      - createdAt
+      - updatedAt
+    WebhookIDAndSecret:
+      type: object
+      properties:
+        id:
+          type: string
+          description: identifier of the webhook
+          example: zhwe_c9ddsgbei1cst46tglh0
+        secret:
+          type: string
+          description: secret to be used by the webhook to verify the events
+          example: zhwhsec_EkXBAkjQZLCtTMtTCoaNatyyiNKARe
+      example:
+        id: zhwe_c9ddsgbei1cst46tglh0
+        secret: zhwhsec_EkXBAkjQZLCtTMtTCoaNatyyiNKARe
+      required:
+      - id
+      - secret
+  securitySchemes:
+    jwt_header_Authorization:
+      type: http
+      description: Provide a JWT token or an API key
+      scheme: bearer
+tags:
+- name: Zebrahook
+  description: Exposes API for Zebrahook
+security:
+- jwt_header_: []
