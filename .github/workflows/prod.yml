@@ -25,4 +25,4 @@ jobs:
           username: "nya1"
           password: ${{ secrets.PAT }}
           repository: nya1/zebrahook
-          tags: ${{ github.event.inputs.version }}
+          tags: ${{ github.event.inputs.version }} latest

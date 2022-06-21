@@ -1,4 +1,7 @@
 # syntax=docker/dockerfile:1
+
+LABEL org.opencontainers.image.source https://github.com/nya1/zebrahook
+
 FROM golang:1.18-buster AS builder
 
 WORKDIR /app

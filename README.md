@@ -38,6 +38,12 @@ Checkout the [sequence diagram](./docs/architecture.md) to learn more
 
 ## CLI
 
+You can easily start zebrahook using docker:
+
+```bash
+docker run -v $PWD/config.json:/config.json -p 3000:3000 -t ghcr.io/nya1/zebrahook --server
+```
+
 ### Start the server
 
 ```bash
