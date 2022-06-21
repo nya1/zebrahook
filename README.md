@@ -18,7 +18,7 @@ Zabrahook is a simple but complete system to fully handle webhooks, inspired by 
 - **Secure**
   - Each registered webhook endpoints have a different secret key, event content is signed (HMAC SHA256) and timestamped to prevent replay attacks.
 
-Integrate the REST API in your backend using the [**OpenAPI Spec**](./gen/http/openapi3.yaml)
+Integrate the REST API in your backend using the [**OpenAPI Spec**](https://generator3.swagger.io/index.html?url=https://raw.githubusercontent.com/nya1/zebrahook/main/gen/http/openapi3.yaml)
 
 
 ## Architecture
