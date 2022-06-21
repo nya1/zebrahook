@@ -22,6 +22,7 @@ jobs:
         name: Login to docker registry
         uses: docker/login-action@v2
         with:
+          registry: ghcr.io
           username: nya1
           password: ${{ secrets.PAT }}
       -
@@ -30,4 +31,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: nya1/zebrahook:${{ github.event.inputs.version }},nya1/zebrahook:latest
+          tags: ghcr.io/nya1/zebrahook:${{ github.event.inputs.version }},ghcr.io/nya1/zebrahook:latest
