@@ -1,0 +1,28 @@
+name: 'build'
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'New version to publish'     
+        required: true
+  #push:
+  #  branches:
+  #  - master
+  #pull_request:
+
+jobs:
+  build:
+    name: 'Build'
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Build:checkout"
+        uses: actions/checkout@v2
+      - name: 'Build:dockerimage'
+        uses: docker/build-push-action@v1
+        with:
+          registry: ghcr.io
+          username: "nya1"
+          password: ${{ secrets.PAT }}
+          repository: nya1/zebrahook
+          tags: ${{ github.event.inputs.version }}
