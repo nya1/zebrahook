@@ -1,4 +1,3 @@
-zebrahook
 
 *.exe
 *.exe~
@@ -22,6 +21,6 @@ go.work
 config.json
 
 # binary file for testing locally
-zebrahook
+./zebrahook
 
 *.log
