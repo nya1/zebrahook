@@ -18,13 +18,16 @@ jobs:
     steps:
       - name: "Build:checkout"
         uses: actions/checkout@v2
-      - name: 'Build:dockerimage'
-        uses: docker/build-push-action@v1
+      -
+        name: Login to docker registry
+        uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: "nya1"
+          username: nya1
           password: ${{ secrets.PAT }}
-          repository: nya1/zebrahook
-          tags: |
-            ${{ github.event.inputs.version }}
-            latest
+      -
+        name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: nya1/zebrahook:${{ github.event.inputs.version }},nya1/zebrahook:latest
